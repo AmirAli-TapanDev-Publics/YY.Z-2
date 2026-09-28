@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>دو نفر، یک قصه‌ی نیمه‌شبی</title>
+	<meta name="description" content="یک هدیه‌ی کوچک؛ معرفی‌نامه‌ی سینمایی دو نفر که ارزش شناختن دارند.">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Lalezar&family=Markazi+Text:wght@400;500;600&family=Vazirmatn:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap"
+		rel="stylesheet">
+
+	<style>
+		/* ============================================================
+   متغیرها و پایه — پالت: زغالیِ گرم + عاجی + کهربای تنگستن
+   ============================================================ */
+		:root {
+			--bg: #0e0c09;
+			--ink: #ece5d8;
+			--ink-dim: rgba(236, 229, 216, .58);
+			--amber: #d2a24f;
+			--amber-deep: #a56a1f;
+			--amber-soft: rgba(210, 162, 79, .16);
+			--cream: #eae0cf;
+			--line: rgba(236, 229, 216, .14);
+			--font-display: 'Lalezar', 'Vazirmatn', sans-serif;
+			--font-serif: 'Markazi Text', 'Vazirmatn', serif;
+			--font-body: 'Vazirmatn', sans-serif;
+			--font-mono: 'Space Mono', 'Vazirmatn', monospace;
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box
+		}
+
+		html {
+			scroll-behavior: auto
+		}
+
+		html,
+		body {
+			overflow-x: clip
+		}
+
+		body {
+			background: var(--bg);
+			color: var(--ink);
+			font-family: var(--font-body);
+			font-weight: 300;
+			line-height: 1.9;
+			-webkit-font-smoothing: antialiased;
+		}
+
+		body.is-loading {
+			overflow: hidden
+		}
+
+		::selection {
+			background: var(--amber);
+			color: #171310
+		}
+
+		::-webkit-scrollbar {
+			width: 10px
+		}
+
+		::-webkit-scrollbar-track {
+			background: #0a0806
+		}
+
+		::-webkit-scrollbar-thumb {
+			background: #2c261e;
+			border-radius: 6px
+		}
+
+		img {
+			display: block;
+			max-width: 100%
+		}
+
+		/* برچسب‌های مونو (لاتین کوچک حس تیتراژ فیلم) */
+		.mono {
+			font-family: var(--font-mono);
+			font-size: 11px;
+			color: var(--ink-dim)
+		}
+
+		.en {
+			letter-spacing: .2em;
+			text-transform: uppercase
+		}
+
+		.wrap {
+			width: min(1100px, 92vw);
+			margin-inline: auto
+		}
+
+		/* ============================================================
+   لایه‌های فضاسازی سینمایی: غبار، وینیت، دانه‌ی فیلم، لِتِرباکس
+   ============================================================ */
+		#dust {
+			position: fixed;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 1;
+			pointer-events: none
+		}
+
+		.vignette {
+			position: fixed;
+			inset: 0;
+			z-index: 50;
+			pointer-events: none;
+			background: radial-gradient(120% 95% at 50% 42%, transparent 55%, rgba(4, 3, 2, .55) 100%)
+		}
+
+		.grain {
+			position: fixed;
+			inset: -120px;
+			z-index: 240;
+			pointer-events: none;
+			opacity: .07;
+			background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/></filter><rect width="300" height="300" filter="url(%23n)" opacity="0.6"/></svg>');
+			animation: grain 1.1s steps(1) infinite
+		}
+
+		@keyframes grain {
+			0% {
+				transform: translate(0, 0)
+			}
+
+			20% {
+				transform: translate(-70px, 45px)
+			}
+
+			40% {
+				transform: translate(45px, -85px)
+			}
+
+			60% {
+				transform: translate(-85px, -25px)
+			}
+
+			80% {
+				transform: translate(65px, 65px)
+			}
+
+			100% {
+				transform: translate(0, 0)
+			}
+		}
+
+		/* نوارهای لِتِرباکس بالا و پایین — فریمِ فیلم */
+		.lb {
+			position: fixed;
+			left: 0;
+			right: 0;
+			height: 7vh;
+			background: #070503;
+			z-index: 70;
+			pointer-events: none
+		}
+
+		.lb--top {
+			top: 0
+		}
+
+		.lb--bottom {
+			bottom: 0
+		}
+
+		/* خط پیشرفت اسکرول */
+		.progress {
+			position: fixed;
+			top: 0;
+			right: 0;
+			left: 0;
+			height: 2px;
+			background: var(--amber);
+			transform: scaleX(0);
+			transform-origin: right center;
+			z-index: 65
+		}
+
+		/* هاله‌ی پروژکتور که دنبال موس می‌آید */
+		.glow {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 56vmax;
+			height: 56vmax;
+			margin: -28vmax 0 0 -28vmax;
+			border-radius: 50%;
+			pointer-events: none;
+			z-index: 40;
+			mix-blend-mode: screen;
+			background: radial-gradient(circle, rgba(214, 170, 90, .09), transparent 62%)
+		}
+
+		/* ============================================================
+   لودر — پرده‌ی سینمایی که از وسط باز می‌شود
+   ============================================================ */
+		#loader {
+			position: fixed;
+			inset: 0;
+			z-index: 200
+		}
+
+		.shutter {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: 50.2%;
+			background: #0a0806
+		}
+
+		.shutter--l {
+			left: 0
+		}
+
+		.shutter--r {
+			right: 0
+		}
+
+		.loader-ui {
+			position: absolute;
+			inset: 0;
+			z-index: 2;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 18px
+		}
+
+		.loader-tag {
+			direction: ltr
+		}
+
+		.loader-name {
+			font-family: var(--font-display);
+			font-size: clamp(30px, 5vw, 52px);
+			line-height: 1.2
+		}
+
+		.loader-bar {
+			width: min(280px, 60vw);
+			height: 1px;
+			background: rgba(236, 229, 216, .15);
+			overflow: hidden
+		}
+
+		.loader-bar i {
+			display: block;
+			height: 100%;
+			background: var(--amber);
+			transform: scaleX(0);
+			transform-origin: right center
+		}
+
+		.loader-pct {
+			direction: ltr;
+			color: var(--amber)
+		}
+
+		/* ============================================================
+   کرسر سفارشی + حالت اینورشن روی عکس‌ها
+   ============================================================ */
+		.cursor-dot,
+		.cursor-ring {
+			display: none
+		}
+
+		@media (pointer:fine) {
+
+			body.has-cursor,
+			body.has-cursor a,
+			body.has-cursor button,
+			body.has-cursor .badge {
+				cursor: none
+			}
+
+			.cursor-dot {
+				display: block;
+				position: fixed;
+				top: -4px;
+				left: -4px;
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background: #fff;
+				mix-blend-mode: difference;
+				z-index: 300;
+				pointer-events: none
+			}
+
+			.cursor-ring {
+				display: block;
+				position: fixed;
+				top: -27px;
+				left: -27px;
+				width: 54px;
+				height: 54px;
+				z-index: 299;
+				pointer-events: none
+			}
+
+			.cursor-inner {
+				width: 100%;
+				height: 100%;
+				border: 1px solid rgba(236, 229, 216, .75);
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				mix-blend-mode: difference;
+				transition: transform .45s cubic-bezier(.22, 1, .36, 1), background .45s, border-color .45s
+			}
+
+			.cursor-inner span {
+				font-size: 11px;
+				font-family: var(--font-body);
+				font-weight: 500;
+				color: #000;
+				opacity: 0;
+				transition: opacity .3s;
+				white-space: nowrap
+			}
+
+			.cursor-ring.is-active .cursor-inner {
+				transform: scale(1.7)
+			}
+
+			.cursor-ring.is-label .cursor-inner {
+				transform: scale(2.5);
+				background: #fff;
+				border-color: #fff
+			}
+
+			.cursor-ring.is-label .cursor-inner span {
+				opacity: 1
+			}
+		}
+
+		@media (pointer:coarse) {
+
+			.cursor-dot,
+			.cursor-ring,
+			.glow {
+				display: none
+			}
+		}
+
+		/* ============================================================
+   نوبار — با blend difference روی هر پس‌زمینه‌ای خودش را تنظیم می‌کند
+   ============================================================ */
+		.nav {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			z-index: 60;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 22px 4.5vw;
+			mix-blend-mode: difference
+		}
+
+		.brand {
+			font-family: var(--font-display);
+			font-size: 20px;
+			color: #ece5d8;
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			gap: .6em;
+			line-height: 1
+		}
+
+		.brand-dot {
+			width: 7px;
+			height: 7px;
+			border-radius: 50%;
+			background: #ece5d8;
+			animation: pulse 2.4s ease-in-out infinite
+		}
+
+		@keyframes pulse {
+
+			0%,
+			100% {
+				transform: scale(1);
+				opacity: 1
+			}
+
+			50% {
+				transform: scale(.5);
+				opacity: .45
+			}
+		}
+
+		.nav-links {
+			display: flex;
+			gap: 2.4em
+		}
+
+		.nav-links a {
+			color: #ece5d8;
+			text-decoration: none;
+			font-size: 14px;
+			position: relative
+		}
+
+		.nav-links a::after {
+			content: '';
+			position: absolute;
+			bottom: -5px;
+			right: 0;
+			height: 1px;
+			width: 100%;
+			background: currentColor;
+			transform: scaleX(0);
+			transform-origin: left;
+			transition: transform .45s cubic-bezier(.77, 0, .18, 1)
+		}
+
+		.nav-links a:hover::after {
+			transform: scaleX(1);
+			transform-origin: right
+		}
+
+		@media (max-width:700px) {
+			.nav-links {
+				display: none
+			}
+		}
+
+		/* ============================================================
+   SCN.01 — هیرو
+   ============================================================ */
+		main {
+			position: relative;
+			z-index: 5
+		}
+
+		.hero {
+			min-height: 100svh;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			padding: 16vh 6vw 12vh;
+			position: relative
+		}
+
+		.hero-eyebrow {
+			margin-bottom: 3.5vh;
+			direction: ltr;
+			text-align: right;
+			display: flex;
+			gap: 1em;
+			align-items: baseline
+		}
+
+		.hero-title {
+			font-family: var(--font-display);
+			font-weight: 400;
+			font-size: clamp(58px, 11.5vw, 168px);
+			line-height: 1.02
+		}
+
+		.h-line {
+			display: block;
+			overflow: hidden;
+			padding-bottom: .06em;
+			margin-bottom: -.06em
+		}
+
+		.h-line--2 {
+			padding-inline-start: 1.6em
+		}
+
+		.h-line--3 {
+			padding-inline-start: .35em
+		}
+
+		.h-inner {
+			display: inline-block;
+			transform: translateY(130%);
+			will-change: transform
+		}
+
+		.hero-title em {
+			font-style: normal;
+			color: var(--amber)
+		}
+
+		.hero-lead {
+			max-width: 560px;
+			margin-top: 4.5vh;
+			color: var(--ink-dim);
+			font-size: clamp(15px, 1.5vw, 18px);
+			line-height: 2.1
+		}
+
+		.scroll-hint {
+			position: absolute;
+			bottom: 5vh;
+			left: 50%;
+			transform: translateX(-50%);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 12px
+		}
+
+		.hint-line {
+			width: 1px;
+			height: 52px;
+			background: rgba(236, 229, 216, .18);
+			overflow: hidden;
+			position: relative
+		}
+
+		.hint-line i {
+			position: absolute;
+			top: -100%;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: var(--amber);
+			animation: hint 2.2s cubic-bezier(.77, 0, .18, 1) infinite
+		}
+
+		@keyframes hint {
+			0% {
+				top: -100%
+			}
+
+			55% {
+				top: 0
+			}
+
+			100% {
+				top: 100%
+			}
+		}
+
+		/* ============================================================
+   مارکی‌های ادیتوریال
+   ============================================================ */
+		.marquee {
+			padding: 7vh 0;
+			overflow: hidden
+		}
+
+		.mq-track {
+			display: flex;
+			align-items: center;
+			width: max-content;
+			direction: ltr;
+			will-change: transform
+		}
+
+		.mq-track span {
+			font-family: var(--font-display);
+			font-size: clamp(40px, 7vw, 92px);
+			line-height: 1.3;
+			white-space: nowrap;
+			padding: 0 .35em;
+			color: transparent;
+			-webkit-text-stroke: 1px rgba(236, 229, 216, .38)
+		}
+
+		.mq-track span.mq-fill {
+			color: var(--amber);
+			-webkit-text-stroke: 0
+		}
+
+		.mq-dot {
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			background: var(--amber);
+			transform: rotate(45deg);
+			margin: 0 2em;
+			flex: none
+		}
+
+		/* ============================================================
+   SCN.02 — پیش‌گفتار (ظهور کلمه‌به‌کلمه با اسکرول)
+   ============================================================ */
+		.manifest {
+			padding: 18vh 0 16vh
+		}
+
+		.manifest-text {
+			font-family: var(--font-serif);
+			font-weight: 500;
+			font-size: clamp(27px, 4.2vw, 54px);
+			line-height: 1.75;
+			margin-top: 6vh;
+			max-width: 1000px
+		}
+
+		.manifest-text .w {
+			opacity: .13
+		}
+
+		.manifest-text .w.acc {
+			color: var(--amber)
+		}
+
+		/* ============================================================
+   SCN.03 و SCN.04 — پروفایل‌ها
+   ============================================================ */
+		.profile {
+			padding: 13vh 0
+		}
+
+		.scene-tag {
+			display: flex;
+			align-items: center;
+			gap: 1em;
+			direction: ltr;
+			justify-content: flex-end
+		}
+
+		.scene-tag i {
+			display: block;
+			width: 44px;
+			height: 1px;
+			background: var(--amber);
+			flex: none
+		}
+
+		.scene-tag--dark {
+			color: rgba(22, 19, 15, .6)
+		}
+
+		.scene-tag--dark i {
+			background: var(--amber-deep)
+		}
+
+		/* اسم غول‌پیکر که عکس از روی نیمه‌ی پایینش رد می‌شود */
+		.name-mask {
+			font-size: clamp(110px, 25vw, 300px);
+			line-height: 1.06;
+			overflow: hidden;
+			text-align: center;
+			position: relative;
+			top: 125px;
+			z-index: 1;
+			margin-bottom: -.13em;
+			will-change: transform
+		}
+		.name-mask-yousef {
+			position: relative;
+			top: 0px;
+			
+		}
+
+		.giant {
+			font-family: var(--font-display);
+			font-weight: 400;
+			font-size: 1em;
+			line-height: 1.06;
+			margin: 0;
+			/* margin-top: 90px; */
+		}
+
+		.profile-visual {
+			position: relative;
+			width: min(880px, 94vw);
+			margin: 0 auto;
+			z-index: 2;
+			perspective: 1000px
+		}
+
+		/* سیم و لامپ آویزان از بالای صفحه */
+		.cord {
+			position: absolute;
+			left: 50%;
+			top: -62vh;
+			height: 62vh;
+			width: 1px;
+			transform: translateX(-50%);
+			background: linear-gradient(to bottom, transparent, rgba(236, 229, 216, .5));
+			z-index: 0
+		}
+
+		.bulb {
+			position: absolute;
+			left: 50%;
+			top: -62vh;
+			width: 10px;
+			height: 14px;
+			transform: translate(-50%, -50%);
+			background: radial-gradient(circle at 50% 35%, #fff3d6, var(--amber) 70%);
+			border-radius: 6px;
+			box-shadow: 0 0 24px 6px rgba(255, 220, 150, .45), 0 0 70px 22px rgba(210, 162, 79, .18);
+			z-index: 0
+		}
+
+		.stage {
+			position: relative;
+			width: min(420px, 78vw);
+			margin: 0 auto;
+			z-index: 2;
+			will-change: transform
+		}
+
+		.spot {
+			position: absolute;
+			left: 50%;
+			bottom: calc(100% - 2px);
+			width: 175%;
+			height: 62vh;
+			transform: translateX(-50%);
+			pointer-events: none;
+			filter: blur(10px);
+			background: conic-gradient(from 180deg at 50% 0%,
+					transparent 41%, rgba(210, 162, 79, .10) 46.5%,
+					rgba(255, 238, 204, .22) 50%, rgba(210, 162, 79, .10) 53.5%, transparent 59%);
+			animation: flicker 5.2s linear infinite
+		}
+
+		@keyframes flicker {
+
+			0%,
+			100% {
+				opacity: .92
+			}
+
+			7% {
+				opacity: .74
+			}
+
+			9% {
+				opacity: .9
+			}
+
+			33% {
+				opacity: .82
+			}
+
+			35% {
+				opacity: .92
+			}
+
+			61% {
+				opacity: .7
+			}
+
+			63% {
+				opacity: .94
+			}
+
+			77% {
+				opacity: .8
+			}
+		}
+
+		.frame {
+			position: relative;
+			overflow: hidden;
+			aspect-ratio: 3/4;
+			/* border: 1px solid rgba(236, 229, 216, .16); */
+			/* box-shadow: 0 70px 140px -40px rgba(0, 0, 0, .85), 0 0 90px -10px var(--amber-soft), 0 30px 60px -30px rgba(0, 0, 0, .6) */
+			transform: scale(1.22);
+			position: relative;
+			top: 75px;
+		}
+		
+		.profile--arman .frame {
+			transform: rotate(2.5deg)
+		}
+		
+		.frame img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			filter: saturate(.92) contrast(1.05);
+			will-change: transform;
+			/* transform: scale(0.7); */
+		}
+
+		.personal-image {
+			display: block;
+			transform: scale(1.22);
+			pointer-events: none
+		}
+
+		.personal-image-2 {
+			transform: scale(1.5);
+			margin-top: 40px;
+		}
+
+		.sheen {
+			position: absolute;
+			inset: 0;
+			pointer-events: none;
+			mix-blend-mode: screen;
+			/* background: linear-gradient(195deg, rgba(255, 240, 208, .16), transparent 42%) */
+		}
+
+		.stage figcaption {
+			margin-top: 14px;
+			text-align: center;
+			color: var(--ink-dim);
+			font-size: 10px;
+			letter-spacing: .08em;
+		}
+
+		/* بیج‌های ویژگی — دقیقاً دور عکس، مثل برچسب‌های پوستر */
+		.badge {
+			position: absolute;
+			z-index: 4;
+			font-size: clamp(12px, 1.1vw, 14px);
+			font-weight: 500;
+			padding: .75em 1.3em;
+			border: 1px solid rgba(236, 229, 216, .22);
+			border-radius: 999px;
+			background: rgba(18, 15, 12, .55);
+			backdrop-filter: blur(8px);
+			white-space: nowrap;
+			color: var(--ink);
+			box-shadow: 0 12px 30px -12px rgba(0, 0, 0, .6);
+			display: inline-flex;
+			align-items: center;
+			gap: .5em
+		}
+
+		.badge svg {
+			flex: none
+		}
+
+		.badge--accent {
+			background: var(--amber);
+			color: #171310;
+			border-color: var(--amber);
+			font-weight: 700
+		}
+
+		/* موقعیت‌ها — یحیی */
+		.profile--ava .b1 {
+			top: -3%;
+			right: 5%
+		}
+
+		.profile--ava .b2 {
+			top: 13%;
+			left: -3%
+		}
+
+		.profile--ava .b3 {
+			top: 33%;
+			right: -5%
+		}
+
+		.profile--ava .b4 {
+			top: 52%;
+			left: -6%
+		}
+
+		.profile--ava .b5 {
+			top: 68%;
+			right: 0
+		}
+
+		.profile--ava .b6 {
+			bottom: -3%;
+			left: 5%
+		}
+
+		.profile--ava .b7 {
+			bottom: -6%;
+			right: 24%
+		}
+
+		/* موقعیت‌ها — یوسف (آینه‌ای) */
+		.profile--arman .b1 {
+			top: -3%;
+			left: 5%
+		}
+
+		.profile--arman .b2 {
+			top: 13%;
+			right: -3%
+		}
+
+		.profile--arman .b3 {
+			top: 33%;
+			left: -5%
+		}
+
+		.profile--arman .b4 {
+			top: 52%;
+			right: -6%
+		}
+
+		.profile--arman .b5 {
+			top: 68%;
+			left: 0
+		}
+
+		.profile--arman .b6 {
+			bottom: -3%;
+			right: 5%
+		}
+
+		.profile--arman .b7 {
+			bottom: -6%;
+			left: 24%
+		}
+
+		@media (max-width:900px) {
+
+			.cord,
+			.bulb {
+				display: none
+			}
+
+			.badges {
+				position: static;
+				gap: 10px;
+			}
+
+			.badge {
+				margin: 30px;
+				/* transform: scale(0.9); */
+			}
+
+			.badge--accent {
+				position: relative;
+				top: 550px;
+				right: 50px;
+			}
+		}
+		@media (max-width: 675px) {
+			.b1-yahya {
+				position: static;
+				left: 24px;
+			}
+		}
+		@media (max-width: 473px) {
+			.b1-yahya {
+				position: relative;
+				left: 38px;
+			}
+
+			/* .badge {
+				transform: scale(0.9);
+			} */
+
+			.b2-yahya {
+				position: relative;
+				right: 50px;
+				bottom: -75px;
+			}
+		}
+
+		/* متادیتا، نقل‌قول، فهرست «بدانید» */
+		.meta {
+			display: flex;
+			flex-wrap: wrap;
+			margin-top: 12vh;
+			border-top: 1px solid var(--line);
+			border-bottom: 1px solid var(--line)
+		}
+
+		.meta-item {
+			flex: 1 1 200px;
+			padding: 1.6em 0;
+			display: flex;
+			flex-direction: column;
+			gap: .5em
+		}
+
+		.meta-item+.meta-item {
+			border-inline-start: 1px solid var(--line);
+			padding-inline-start: 2.5em
+		}
+
+		.meta-item b {
+			font-family: var(--font-serif);
+			font-weight: 500;
+			font-size: clamp(20px, 2.2vw, 28px);
+			line-height: 1.4
+		}
+
+		@media (max-width:640px) {
+			.meta-item {
+				flex: 1 1 100%;
+				border-inline-start: none !important;
+				padding-inline-start: 0 !important
+			}
+
+			.meta-item+.meta-item {
+				border-top: 1px solid var(--line)
+			}
+
+			.meta-item:first-child {
+				border-top: none
+			}
+		}
+
+		.quote {
+			max-width: 760px;
+			margin: 10vh auto 0;
+			padding-inline-start: 1.6em;
+			border-inline-start: 2px solid var(--amber)
+		}
+
+		.quote p {
+			font-family: var(--font-serif);
+			font-weight: 500;
+			font-size: clamp(26px, 3.4vw, 44px);
+			line-height: 1.6
+		}
+
+		.quote footer {
+			margin-top: 1em
+		}
+
+		.know-wrap {
+			margin: 12vh auto 0;
+			max-width: 760px
+		}
+
+		.know-title {
+			font-family: var(--font-serif);
+			font-weight: 500;
+			font-size: clamp(24px, 2.6vw, 32px);
+			margin-bottom: .6em
+		}
+
+		.know {
+			list-style: none
+		}
+
+		.know li {
+			display: flex;
+			align-items: baseline;
+			gap: 1.6em;
+			padding: 1.5em 0;
+			border-bottom: 1px solid var(--line);
+			transition: transform .45s cubic-bezier(.22, 1, .36, 1)
+		}
+
+		.know li:hover {
+			transform: translateX(-10px)
+		}
+
+		.know li .mono {
+			color: var(--amber);
+			flex: none
+		}
+
+		.know li p {
+			font-size: clamp(15px, 1.7vw, 19px)
+		}
+
+		/* ============================================================
+   SCN.05 — آمارِ غیررسمی (سطرهای ادیتوریال، نه کارت)
+   ============================================================ */
+		.stats {
+			padding: 15vh 0
+		}
+
+		.stats-lead {
+			color: var(--ink-dim);
+			margin-top: 5vh
+		}
+
+		.stat {
+			display: flex;
+			align-items: baseline;
+			gap: 5vw;
+			padding: 5vh 0;
+			border-top: 1px solid var(--line)
+		}
+
+		.stat:last-child {
+			border-bottom: 1px solid var(--line)
+		}
+
+		.stat-num {
+			font-family: var(--font-display);
+			font-size: clamp(60px, 10vw, 150px);
+			line-height: 1;
+			min-width: 2.6ch;
+			transition: color .4s
+		}
+
+		.stat:hover .stat-num {
+			color: var(--amber)
+		}
+
+		.stat-body h3 {
+			font-family: var(--font-serif);
+			font-weight: 500;
+			font-size: clamp(23px, 3vw, 38px);
+			line-height: 1.4
+		}
+
+		.stat-body p {
+			color: var(--ink-dim);
+			font-size: clamp(13.5px, 1.4vw, 16px);
+			margin-top: .4em
+		}
+
+		@media (max-width:600px) {
+			.stat {
+				flex-direction: column;
+				gap: 1em
+			}
+		}
+
+		/* ============================================================
+   SCN.06 — پایان روی کرم (ضربه‌ی ادیتوریال معکوس)
+   ============================================================ */
+		.outro {
+			background: var(--cream);
+			color: #16130f;
+			padding: 16vh 0 6vh;
+			position: relative;
+			z-index: 5
+		}
+
+		.outro-title {
+			font-family: var(--font-display);
+			font-weight: 400;
+			font-size: clamp(48px, 8.5vw, 120px);
+			line-height: 1.1;
+			margin-top: 5vh
+		}
+
+		.outro-title em {
+			font-style: normal;
+			color: var(--amber-deep)
+		}
+
+		.outro-lead {
+			max-width: 620px;
+			margin-top: 3.5vh;
+			line-height: 2.1;
+			color: rgba(22, 19, 15, .78);
+			font-size: clamp(15px, 1.5vw, 17.5px)
+		}
+
+		.outro-actions {
+			display: flex;
+			gap: 1.2em;
+			flex-wrap: wrap;
+			margin-top: 6vh
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			gap: .8em;
+			padding: 1.05em 2.2em;
+			border-radius: 999px;
+			background: #16130f;
+			color: #ece5d8;
+			text-decoration: none;
+			font-size: 15px;
+			font-weight: 500;
+			border: 1px solid #16130f;
+			transition: background .35s, color .35s;
+			will-change: transform
+		}
+
+		.btn svg {
+			transition: transform .35s
+		}
+
+		.btn:hover {
+			background: transparent;
+			color: #16130f
+		}
+
+		.btn:hover svg {
+			transform: translateX(-5px)
+		}
+
+		.btn--ghost {
+			background: transparent;
+			color: #16130f
+		}
+
+		.btn--ghost:hover {
+			background: #16130f;
+			color: #ece5d8
+		}
+
+		.footer {
+			margin-top: 14vh;
+			padding-top: 2em;
+			border-top: 1px solid rgba(22, 19, 15, .18);
+			display: flex;
+			justify-content: space-between;
+			gap: 1em;
+			flex-wrap: wrap;
+			font-size: 13px;
+			color: rgba(22, 19, 15, .75)
+		}
+
+		.mono-dark {
+			color: rgba(22, 19, 15, .6)
+		}
+
+		/* احترام به کاربرانی که حرکت کمتر می‌خواهند */
+		@media (prefers-reduced-motion:reduce) {
+
+			.grain,
+			.hint-line i,
+			.spot {
+				animation: none
+			}
+		}
+
+		@media (max-width: 768px) {
+			.hero {
+				margin-top: -100px;
+			}
+			.h-inner {
+				font-size: larger;
+			}
+		}
+	</style>
+</head>
+
+<body class="is-loading">
+
+	<!-- ــــ لودر سینمایی (پرده‌ی دو لنگه) ــــ -->
+	<div id="loader">
+		<div class="shutter shutter--l"></div>
+		<div class="shutter shutter--r"></div>
+		<div class="loader-ui">
+			<div class="mono loader-tag en">یک هدیه &middot; برای جبران</div>
+			<div class="loader-name">دو نفر، یک زنگی</div>
+			<div class="loader-bar"><i></i></div>
+			<div class="mono loader-pct" id="loader-pct">۰٪</div>
+		</div>
+	</div>
+
+	<!-- ــــ لایه‌های فضاسازی ــــ -->
+	<canvas id="dust" aria-hidden="true"></canvas>
+	<div class="glow" aria-hidden="true"></div>
+	<div class="vignette" aria-hidden="true"></div>
+	<div class="lb lb--top" aria-hidden="true"></div>
+	<div class="lb lb--bottom" aria-hidden="true"></div>
+	<div class="progress" aria-hidden="true"></div>
+	<div class="grain" aria-hidden="true"></div>
+
+	<!-- ــــ کرسر سفارشی ــــ -->
+	<div class="cursor-dot" aria-hidden="true"></div>
+	<div class="cursor-ring" aria-hidden="true">
+		<div class="cursor-inner"><span>نگاه کن</span></div>
+	</div>
+
+	<!-- ــــ نوبار ــــ -->
+	<header class="nav">
+		<a class="brand" href="#hero">دو نفر، یک قصه<i class="brand-dot"></i></a>
+		<nav class="nav-links">
+			<a href="#ava">یحیی</a>
+			<a href="#arman">یوسف</a>
+			<a href="#fin">پایان</a>
+		</nav>
+	</header>
+
+	<main>
+
+		<!-- ══════════ SCN.01 — تیتراژ ══════════ -->
+		<section class="hero" id="hero">
+			<p class="hero-eyebrow mono" dir="ltr"><span class="en">AmirAli - TapanDev &copy; 2026 Official Website.</span><bdi>
+					</bdi></p>
+			<h1 class="hero-title">
+				<span class="h-line"><span class="h-inner">اهم...</span></span>
+				<span class="h-line h-line--2"><span class="h-inner">قراره،</span></span>
+				<span class="h-line h-line--3"><span class="h-inner"><em>کراش</em> بزنی</span></span>
+			</h1>
+			<p class="hero-lead">
+				خب خب خب... <br>
+				قراره کسایی رو بهت معرفی کنم که، برای من تا الان فقط ظاهر نبودن ! <br>
+				سازنده ی بهترییییننن خاظره ها، لحظه ها و حتی خنده های به یاد موندنی ان لامصبا . <br>
+				از حق نگذریم، بد خوشگلنااااا !!!
+			</p>
+			<div class="scroll-hint" aria-hidden="true">
+				<span class="mono">اسکرول</span>
+				<span class="hint-line"><i></i></span>
+			</div>
+		</section>
+
+		<!-- مارکی ۱ -->
+		<div class="marquee" data-speed="26" data-reverse="true" aria-hidden="true">
+			<div class="mq-track">
+				<span class="mq-fill">ولی حواست باشه هاااا</span><i class="mq-dot"></i>
+				<span>هردوشون ماله منن !</span><i class="mq-dot"></i>
+			</div>
+		</div>
+
+		<!-- ══════════ SCN.02 — پیش‌گفتار ══════════ -->
+		<section class="manifest">
+			<div class="wrap">
+				<div class="scene-tag mono" data-reveal><i></i><span class="en">SCN.02 — FOREWORD</span><bdi>·
+						پیش‌گفتار</bdi>
+				</div>
+				<p class="manifest-text" id="manifest-text">
+					والا... بزار اینجوری بگم که، این دو برادر، تا به الان
+					اتفاقاتی توی زندگیم ایجاد کردن که، 
+					سطح انگیزه، شاد بودنم و حتی بحث احساس رو، چندین برابر کردن...
+					بخدا که هرچی ازشون بگم کمه برار ! چون ماشالا تبارکاالله، غیر از ظاهر پر ملات، باتن روشنی هم دارن ! 
+					دیگه اگه میخوای درموردشون بیشتر بفهمی و آشنا شی، یکم دیگه برو پایین، بهش میرسی . 
+				</p>
+			</div>
+		</section>
+
+		<!-- ══════════ SCN.03 — یحیی ══════════ -->
+		<section class="profile profile--ava" id="ava">
+			<div class="wrap">
+				<div class="scene-tag mono" data-reveal><i></i><span class="en">SCN.03 — CAST 01</span><bdi>· معرفیِ
+						یحیی</bdi>
+				</div>
+
+				<div class="name-mask">
+					<h2 class="giant">یحیی</h2>
+				</div>
+
+				<div class="profile-visual">
+					<div class="cord" aria-hidden="true"></div>
+					<div class="bulb" aria-hidden="true"></div>
+
+					<div class="badges">
+						<span class="badge b1 b1-yahya" data-speed="0.6">ناناز طلای همیشگی</span>
+						<span class="badge b2 b2-yahya" data-speed="1.1">بچه‌پولدار</span>
+						<span class="badge b3" data-speed="0.8">لوس ولی ملوس</span>
+						<span class="badge b4" data-speed="1.3">علاقه زیاد به رفیق خوباش</span>
+						<span class="badge b5" data-speed="0.7">خوش خنده</span>
+						<span class="badge b6" data-speed="1.0">گوگول فیس</span>
+						<span class="badge badge--accent b7" data-speed="0.5">
+							<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+								<path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
+							</svg>
+							فمبوی مهربون
+						</span>
+					</div>
+
+					<figure class="stage" data-cursor="نگاه کن">
+						<!-- <div class="spot" aria-hidden="true"></div> -->
+						<img class="personal-image img class="personal-image-2" src="./Yahya1.png" alt="پرتره‌ی یحیی">
+						<!-- <div class="frame"> -->
+							<!-- ★★★ عکس «یحیی» را این‌جا بگذارید: فقط src را عوض کنید (عمودی، نسبت ۳:۴) ★★★ -->
+							<!-- <div class="sheen" aria-hidden="true"></div> -->
+						<!-- </div> -->
+					</figure>
+				</div>
+
+				<div class="meta" data-reveal>
+					<div class="meta-item"><span class="mono en">AGE</span><b>14</b></div>
+					<div class="meta-item"><span class="mono en">CITY</span><b>مشهد</b></div>
+					<div class="meta-item"><span class="mono en">STATUS</span><b>پیاماشو یکم با تاخیر جواب میده</b></div>
+				</div>
+
+				<blockquote class="quote" data-reveal>
+					<p>یحیی یعنی: امیدی برای لمس حس ها، از نزدیک و قابل درک .»</p>
+					<footer class="mono">— از دفترِ خاطراتِ رفاقت صحیح</footer>
+				</blockquote>
+
+				<div class="know-wrap">
+					<h3 class="know-title" data-reveal>قبل از آشنایی، بدونین دیگه</h3>
+					<ul class="know">
+						<li><span class="mono en">01</span>
+							<p>حواست  باشه دیگه خیلی خیلی هم نمالیش !</p>
+						</li>
+						<li><span class="mono en">02</span>
+							<p> همیشه دنبال یک سوژه، برای کمک بهش باش .</p>
+						</li>
+						<li><span class="mono en">03</span>
+							<p>بدون فیلتر، ذاتا تا خرتناق دافه .</p>
+						</li>
+						<li><span class="mono en">04</span>
+							<p>با کسایی که شوختب و بامزه ی به موقع هستن، حال میکنه و بهشون میگه "بچه باحال"</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<!-- مارکی ۲ -->
+		<div class="marquee" data-speed="20" data-reverse="true" aria-hidden="true">
+			<div class="mq-track">
+				<span class="mq-fill">حالا</span><i class="mq-dot"></i>
+				<span>نیمه‌ی دومِ داستان</span><i class="mq-dot"></i>
+				<span class="mq-fill">حالا</span><i class="mq-dot"></i>
+				<span>نیمه‌ی دومِ داستان</span><i class="mq-dot"></i>
+			</div>
+		</div>
+
+		<!-- ══════════ SCN.04 — یوسف ══════════ -->
+		<section class="profile profile--arman" id="arman">
+			<div class="wrap">
+				<div class="scene-tag mono" data-reveal><i></i><span class="en">SCN.04 — CAST 02</span><bdi>· معرفیِ
+						یوسف</bdi>
+				</div>
+
+				<div class="name-mask name-mask-yousef">
+					<h2 class="giant">یوسف</h2>
+				</div>
+
+				<div class="profile-visual">
+					<div class="cord" aria-hidden="true"></div>
+					<div class="bulb" aria-hidden="true"></div>
+
+					<div class="badges">
+						<span class="badge b1" data-speed="0.7">خوشتیپ، تا بینهایت</span>
+						<span class="badge b2" data-speed="1.2">اینم بچه پولدار</span>
+						<span class="badge b3" data-speed="0.8">خوش فورم، از همه لحاظ</span>
+						<span class="badge b4" data-speed="1.4">با شعور ترین</span>
+						<span class="badge b5" data-speed="0.6">معرفت واقعی داره </span>
+						<span class="badge b6" data-speed="1.0">تو آفتاب، رخش میدرخشه</span>
+						<span class="badge badge--accent b7" data-speed="0.5">
+							<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+								<path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
+							</svg>
+							بزرگ‌ترین حامیِ خوشتیپ ترین ها
+						</span>
+					</div>
+
+					<figure class="stage" data-cursor="نگاه کن">
+						<div class="spot" aria-hidden="true"></div>
+						<img class="personal-image personal-image-2" src="./Yousef1.png" alt="پرتره‌ی یوسف" loading="lazy">
+						<!-- <div class="frame"> -->
+							<!-- ★★★ عکس «یوسف» را این‌جا بگذارید: فقط src را عوض کنید (عمودی، نسبت ۳:۴) ★★★ -->
+							<!-- <div class="sheen" aria-hidden="true"></div> -->
+						<!-- </div> -->
+					</figure>
+				</div>
+
+				<div class="meta" data-reveal>
+					<div class="meta-item"><span class="mono en">AGE</span><b>14</b></div>
+					<div class="meta-item"><span class="mono en">CITY</span><b>مشهد</b></div>
+					<div class="meta-item"><span class="mono en">STATUS</span><b>پیاماشو یکم با تاخیر جواب میده</b></div>
+				</div>
+
+				<blockquote class="quote" data-reveal>
+					<p>یوسف یعنی: تکیه‌گاهِ بی‌سروصدا؛ رفیقی که شرایط هاتو درک میکنه، باهات همیشه هست.»</p>
+					<footer class="mono">— از دفترِ خاطراتِ رفاقت صحیح</footer>
+				</blockquote>
+
+				<div class="know-wrap">
+					<h3 class="know-title" data-reveal>قبل از آشنایی، بدانید</h3>
+					<ul class="know">
+						<li><span class="mono en">01</span>
+							<p>هردوشون از شوخی بیش از حد، بدشون میاد .</p>
+						</li>
+						<li><span class="mono en">02</span>
+							<p>دنبال رفیق با معرفت سر وقت هست .</p>
+						</li>
+						<li><span class="mono en">03</span>
+							<p>مثل یحیی، دنبال بچه باحاله.</p>
+						</li>
+						<li><span class="mono en">04</span>
+							<p>اگه رفیق واقعیش بشی، هیچوقت خیانت نمیکنه !!!</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<!-- ══════════ SCN.05 — آمارِ غیررسمی ══════════ -->
+		<section class="stats">
+			<div class="wrap">
+				<div class="scene-tag mono" data-reveal><i></i><span class="en">SCN.05 — NUMBERS</span><bdi>· آمارِ
+						غیررسمی</bdi></div>
+				<p class="stats-lead" data-reveal>سه عدد که دیشب در جلسه‌ی فوق‌العاده تصویب شد:</p>
+
+				<div class="stat" data-reveal>
+					<div class="stat-num" data-count="626">۰</div>
+					<div class="stat-body">
+						<h3>بار خندیدنِ مشترک</h3>
+						<p>شاید اونقدرایی دقیق نباشه، ولی از اونجایی که میدونم حسابش از دستم در رفته انقد که زیاد بوده، یک میانگین کم گفتم .</p>
+					</div>
+				</div>
+				<div class="stat" data-reveal>
+					<div class="stat-num" data-count="100" data-suffix="٪">۰</div>
+					<div class="stat-body">
+						<h3>درصدِ صادقانه بودنِ این صفحه</h3>
+						<p>دیگه کاملا از برداشت های حساب شده ی خودم، باهات در میون گذاشتم.</p>
+					</div>
+				</div>
+				<div class="stat" data-reveal>
+					<div class="stat-num stat-num--inf">∞</div>
+					<div class="stat-body">
+						<h3>علاقه مند میشی بهشون</h3>
+						<p>دیگه نظر من و همه همینه...  شکی توش نیست حاجی جان !</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ══════════ SCN.06 — پایان ══════════ -->
+		<section class="outro" id="fin">
+			<div class="wrap">
+				<div class="scene-tag scene-tag--dark mono" data-reveal><i></i><span class="en">SCN.06 —
+						ENDING</span><bdi>·
+						پایانِ سایت </bdi></div>
+				<h2 class="outro-title" data-reveal>ساخته شده با عشق —<br><em> سید امیرعلی حسینی.</em></h2>
+				<p class="outro-lead" data-reveal>
+					خب دیگه، اینم از این دو اعجوبه ی متنوع ! <br>
+					و اینم از این سایت برای هدیه من به اونا . اگه خودتون دارین این سایتو میبینین، <br>
+					امیدوارم خوشتون اومده باشه، و یا هرکی که تا الان سایت رو خونده، مرسی که بودی ... 
+				</p>
+				
+				<footer class="footer" data-reveal>
+					<span>ساخته‌شده در دلِ شب، بدون قالبِ آماده و با کلی محبت.</span>
+					<span class="mono mono-dark en">FIN. — 2025</span>
+				</footer>
+			</div>
+		</section>
+
+	</main>
+
+	<!-- ــــ کتابخانه‌ها ــــ -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+	<script>
+		window.addEventListener('DOMContentLoaded', () => {
+			gsap.registerPlugin(ScrollTrigger);
+
+			const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			const isFine = window.matchMedia('(pointer: fine)').matches;
+			const faNum = n => Math.round(n).toLocaleString('fa-IR');
+
+			/* ── اسکرول نرم با Lenis، هم‌قفل با ScrollTrigger ── */
+			let lenis = null;
+			if (window.Lenis && !prefersReduced) {
+				lenis = new Lenis({ duration: 1.25, smoothWheel: true });
+				lenis.on('scroll', ScrollTrigger.update);
+				gsap.ticker.add(t => lenis.raf(t * 1000));
+				gsap.ticker.lagSmoothing(0);
+				lenis.stop(); // تا پایان لودر قفل است
+			}
+
+			/* ── لینک‌های داخلی: اسکرول نرم به سکشن‌ها ── */
+			document.querySelectorAll('a[href^="#"]').forEach(a => {
+				a.addEventListener('click', e => {
+					const id = a.getAttribute('href');
+					if (id.length > 1 && document.querySelector(id)) {
+						e.preventDefault();
+						if (lenis) lenis.scrollTo(id, { offset: -70, duration: 1.6 });
+						else document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+					}
+				});
+			});
+
+			/* ═══════════ لودر سینمایی ═══════════ */
+			const startSite = () => {
+				document.body.classList.remove('is-loading');
+				if (lenis) lenis.start();
+				if (!prefersReduced) heroIntro();
+			};
+
+			if (prefersReduced) {
+				document.getElementById('loader').style.display = 'none';
+				gsap.set('.h-inner', { yPercent: 0, y: 0 });
+				gsap.set('.lb', { height: 0 });
+				document.querySelectorAll('#manifest-text .w').forEach(w => w.style.opacity = 1);
+				startSite();
+			} else {
+				const pctEl = document.getElementById('loader-pct');
+				const pct = { v: 0 };
+				gsap.timeline({ onComplete: startSite })
+					.to('.loader-bar i', { scaleX: 1, duration: 1.3, ease: 'power2.inOut' }, 0)
+					.to(pct, {
+						v: 100, duration: 1.3, ease: 'power2.inOut',
+						onUpdate: () => pctEl.textContent = faNum(pct.v) + '٪'
+					}, 0)
+					.to('.loader-ui', { autoAlpha: 0, y: -24, duration: .5, ease: 'power2.in' }, '+=.15')
+					.to('.shutter--l', { xPercent: -101, duration: 1, ease: 'power4.inOut' }, '<.1')
+					.to('.shutter--r', { xPercent: 101, duration: 1, ease: 'power4.inOut' }, '<')
+					.set('#loader', { display: 'none' });
+			}
+
+			/* ── ورود هیرو بعد از باز شدن پرده ── */
+			function heroIntro() {
+				gsap.timeline()
+					.to('.h-inner', { yPercent: 0, y: 0, duration: 1.25, ease: 'power4.out', stagger: .13 }, 0)
+					.to('.lb', { height: '4.5vh', duration: 1.5, ease: 'power3.inOut' }, 0)
+					.from('.hero-eyebrow', { autoAlpha: 0, y: 16, duration: .8, ease: 'power3.out' }, .25)
+					.from('.hero-lead', { autoAlpha: 0, y: 24, duration: .9, ease: 'power3.out' }, .6)
+					.from('.nav', { autoAlpha: 0, y: -14, duration: .8, ease: 'power3.out' }, .45)
+					.from('.scroll-hint', { autoAlpha: 0, duration: .8 }, 1);
+			}
+
+			/* ── لِتِرباکس با اسکرول جمع می‌شود ── */
+			gsap.to('.lb', {
+				height: 0, ease: 'none',
+				scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom 40%', scrub: true }
+			});
+
+			/* ── خط پیشرفت اسکرول ── */
+			gsap.to('.progress', {
+				scaleX: 1, ease: 'none',
+				scrollTrigger: { start: 0, end: 'max', scrub: .3 }
+			});
+
+			/* ═══════════ مارکی‌ها: تکرار بی‌درز ═══════════ */
+			gsap.utils.toArray('.marquee').forEach(mq => {
+				const track = mq.querySelector('.mq-track');
+				let guard = 0;
+				while (track.scrollWidth < window.innerWidth * 2 && guard < 5) {
+					track.innerHTML += track.innerHTML; guard++;
+				}
+				const tween = gsap.to(track, {
+					xPercent: mq.dataset.reverse ? 50 : -50,
+					duration: parseFloat(mq.dataset.speed || '24'),
+					ease: 'none', repeat: -1
+				});
+				if (prefersReduced) tween.pause();
+			});
+
+			/* ═══════════ پیش‌گفتار: ظهور کلمه‌به‌کلمه ═══════════ */
+			const mEl = document.getElementById('manifest-text');
+			const accentWords = ['دو', 'برادر', 'اتفاقاتی ', 'زندگیم', 'احساس', "ظاهر", "باتن", "آشنا "];
+			mEl.innerHTML = mEl.textContent.trim().split(/\s+/).map(w => {
+				const acc = accentWords.includes(w.replace(/[«»؛،.]/g, ''));
+				return `<span class="w${acc ? ' acc' : ''}">${w}</span>`;
+			}).join(' ');
+			if (!prefersReduced) {
+				gsap.to('#manifest-text .w', {
+					opacity: 1, stagger: .06, ease: 'none',
+					scrollTrigger: { trigger: mEl, start: 'top 78%', end: 'bottom 52%', scrub: 1 }
+				});
+			}
+
+			/* ═══════════ سکشن‌های پروفایل ═══════════ */
+			gsap.utils.toArray('.profile').forEach(sec => {
+				const mask = sec.querySelector('.name-mask');
+				const giant = sec.querySelector('.giant');
+				const frame = sec.querySelector('.frame');
+				const img = sec.querySelector('.frame img');
+				const visual = sec.querySelector('.profile-visual');
+
+				// پارالاکس اسم پشت عکس + ظهور ماسک‌شده
+				gsap.fromTo(mask, { y: 80 }, {
+					y: -60, ease: 'none',
+					scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: 1 }
+				});
+				gsap.from(giant, {
+					yPercent: 115, duration: 1.2, ease: 'power4.out',
+					scrollTrigger: { trigger: sec, start: 'top 75%', once: true }
+				});
+
+				// باز شدن قاب عکس از پایین به بالا مثل پرده
+				gsap.fromTo(frame, { clipPath: 'inset(100% 0% 0% 0%)' },
+					{
+						clipPath: 'inset(0% 0% 0% 0%)', duration: 1.3, ease: 'power4.inOut',
+						scrollTrigger: { trigger: frame, start: 'top 78%', once: true }
+					});
+				gsap.from(img, {
+					scale: 1.45, duration: 1.7, ease: 'power3.out',
+					scrollTrigger: { trigger: frame, start: 'top 78%', once: true }
+				});
+
+				// پارالاکس داخلی عکس (حس عمق)
+				gsap.fromTo(img, { yPercent: -9 }, {
+					yPercent: 9, ease: 'none',
+					scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: 1 }
+				});
+
+				// روشن شدن نور با ورود به سکشن
+				gsap.from(sec.querySelectorAll('.spot, .bulb, .cord'),
+					{
+						autoAlpha: 0, duration: 1.8, ease: 'power2.out',
+						scrollTrigger: { trigger: sec, start: 'top 70%', once: true }
+					});
+
+				// بیج‌ها: ورود فنری + پارالاکس با سرعت‌های متفاوت
+				sec.querySelectorAll('.badge').forEach((b, i) => {
+					gsap.from(b, {
+						autoAlpha: 0, scale: .6,
+						rotation: gsap.utils.random(-14, 14),
+						delay: i * .09, duration: .9, ease: 'back.out(2.2)',
+						scrollTrigger: { trigger: visual, start: 'top 62%', once: true }
+					});
+					const s = parseFloat(b.dataset.speed || .8);
+					gsap.fromTo(b, { y: 42 * s }, {
+						y: -42 * s, ease: 'none',
+						scrollTrigger: { trigger: visual, start: 'top bottom', end: 'bottom top', scrub: 1 }
+					});
+					if (isFine) {
+						b.addEventListener('mouseenter', () =>
+							gsap.fromTo(b, { rotation: gsap.utils.random(-9, -3) },
+								{ rotation: 0, duration: .9, ease: 'elastic.out(1,.35)' }));
+					}
+				});
+			});
+
+			/* ── تیلت سه‌بعدیِ قاب عکس با موس ── */
+			if (isFine && !prefersReduced) {
+				document.querySelectorAll('.stage').forEach(stage => {
+					const rX = gsap.quickTo(stage, 'rotationX', { duration: .6, ease: 'power3' });
+					const rY = gsap.quickTo(stage, 'rotationY', { duration: .6, ease: 'power3' });
+					stage.addEventListener('mousemove', e => {
+						const r = stage.getBoundingClientRect();
+						const px = (e.clientX - r.left) / r.width - .5;
+						const py = (e.clientY - r.top) / r.height - .5;
+						rY(px * 6); rX(-py * 5);
+					});
+					stage.addEventListener('mouseleave', () => { rX(0); rY(0); });
+				});
+			}
+
+			/* ── ظهور عمومی عناصر ── */
+			gsap.utils.toArray('[data-reveal]').forEach(el => {
+				gsap.from(el, {
+					y: 50, autoAlpha: 0, duration: 1, ease: 'power3.out',
+					scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+				});
+			});
+			gsap.utils.toArray('.know').forEach(list => {
+				gsap.from(list.querySelectorAll('li'), {
+					y: 36, autoAlpha: 0, duration: .8,
+					ease: 'power3.out', stagger: .09,
+					scrollTrigger: { trigger: list, start: 'top 85%', once: true }
+				});
+			});
+
+			/* ═══════════ آمار: شمارنده‌ی فارسی + بی‌نهایت ═══════════ */
+			document.querySelectorAll('.stat-num[data-count]').forEach(el => {
+				if (prefersReduced) { el.textContent = faNum(+el.dataset.count) + (el.dataset.suffix || ''); return; }
+				const obj = { v: 0 };
+				gsap.to(obj, {
+					v: +el.dataset.count, duration: 1.8, ease: 'power2.out',
+					scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+					onUpdate: () => el.textContent = faNum(obj.v) + (el.dataset.suffix || '')
+				});
+			});
+			const inf = document.querySelector('.stat-num--inf');
+			if (inf && !prefersReduced) {
+				gsap.timeline({ scrollTrigger: { trigger: inf, start: 'top 88%', once: true } })
+					.from(inf, { scale: 0, rotation: -14, duration: .9, ease: 'back.out(2.2)' })
+					.to(inf, { scale: 1.08, duration: 1.4, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+			}
+
+			/* ═══════════ کرسر سفارشی + هاله‌ی پروژکتور ═══════════ */
+			if (isFine && !prefersReduced) {
+				document.body.classList.add('has-cursor');
+				const dot = document.querySelector('.cursor-dot');
+				const ring = document.querySelector('.cursor-ring');
+				const ringLabel = ring.querySelector('.cursor-inner span');
+				const glow = document.querySelector('.glow');
+				const dX = gsap.quickTo(dot, 'x', { duration: .1, ease: 'power3' });
+				const dY = gsap.quickTo(dot, 'y', { duration: .1, ease: 'power3' });
+				const rX = gsap.quickTo(ring, 'x', { duration: .45, ease: 'power3' });
+				const rY = gsap.quickTo(ring, 'y', { duration: .45, ease: 'power3' });
+				const gX = gsap.quickTo(glow, 'x', { duration: .9, ease: 'power3' });
+				const gY = gsap.quickTo(glow, 'y', { duration: .9, ease: 'power3' });
+				window.addEventListener('mousemove', e => {
+					dX(e.clientX); dY(e.clientY);
+					rX(e.clientX); rY(e.clientY);
+					gX(e.clientX); gY(e.clientY);
+				}, { passive: true });
+				document.querySelectorAll('a, button, .badge, .know li').forEach(el => {
+					el.addEventListener('mouseenter', () => ring.classList.add('is-active'));
+					el.addEventListener('mouseleave', () => ring.classList.remove('is-active'));
+				});
+				document.querySelectorAll('[data-cursor]').forEach(el => {
+					el.addEventListener('mouseenter', () => {
+						ringLabel.textContent = el.getAttribute('data-cursor');
+						ring.classList.add('is-label');
+					});
+					el.addEventListener('mouseleave', () => ring.classList.remove('is-label'));
+				});
+			}
+
+			/* ── دکمه‌های مغناطیسی ── */
+			if (isFine && !prefersReduced) {
+				document.querySelectorAll('.btn').forEach(btn => {
+					const xTo = gsap.quickTo(btn, 'x', { duration: .4, ease: 'power3' });
+					const yTo = gsap.quickTo(btn, 'y', { duration: .4, ease: 'power3' });
+					btn.addEventListener('mousemove', e => {
+						const r = btn.getBoundingClientRect();
+						xTo((e.clientX - (r.left + r.width / 2)) * .3);
+						yTo((e.clientY - (r.top + r.height / 2)) * .45);
+					});
+					btn.addEventListener('mouseleave', () =>
+						gsap.to(btn, { x: 0, y: 0, duration: .7, ease: 'elastic.out(1,.4)' }));
+				});
+			}
+
+			/* ═══════════ غبار در نور پروژکتور — Three.js ═══════════ */
+			if (window.THREE && !prefersReduced) {
+				const canvas = document.getElementById('dust');
+				const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+				renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+				const scene = new THREE.Scene();
+				const camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, .1, 50);
+				camera.position.z = 7;
+
+				// تکسچر ذره: دایره‌ی نرم (نه مربع خام)
+				const tc = document.createElement('canvas'); tc.width = tc.height = 64;
+				const tg = tc.getContext('2d');
+				const grd = tg.createRadialGradient(32, 32, 0, 32, 32, 30);
+				grd.addColorStop(0, 'rgba(255,238,205,1)');
+				grd.addColorStop(.35, 'rgba(255,224,175,.55)');
+				grd.addColorStop(1, 'rgba(255,224,175,0)');
+				tg.fillStyle = grd; tg.fillRect(0, 0, 64, 64);
+				const tex = new THREE.CanvasTexture(tc);
+
+				const COUNT = innerWidth < 768 ? 70 : 150;
+				const pos = new Float32Array(COUNT * 3);
+				const meta = [];
+				for (let i = 0; i < COUNT; i++) {
+					pos[i * 3] = (Math.random() - .5) * 16;
+					pos[i * 3 + 1] = (Math.random() - .5) * 10;
+					pos[i * 3 + 2] = (Math.random() - .5) * 6;
+					meta.push({
+						bx: pos[i * 3], vy: (Math.random() - .5) * .004,
+						amp: .2 + Math.random() * .5, ph: Math.random() * Math.PI * 2, sp: .3 + Math.random() * .7
+					});
+				}
+				const geo = new THREE.BufferGeometry();
+				geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+				const mat = new THREE.PointsMaterial({
+					size: .09, map: tex, transparent: true, opacity: .5,
+					color: 0xd8a75f, blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
+				});
+				scene.add(new THREE.Points(geo, mat));
+
+				let mx = 0, my = 0, t = 0;
+				addEventListener('mousemove', e => {
+					mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5;
+				}, { passive: true });
+				const size = () => {
+					renderer.setSize(innerWidth, innerHeight);
+					camera.aspect = innerWidth / innerHeight;
+					camera.updateProjectionMatrix();
+				};
+				size(); addEventListener('resize', size);
+
+				(function loop() {
+					requestAnimationFrame(loop);
+					if (document.hidden) return;
+					t += .016;
+					const p = geo.attributes.position.array;
+					for (let i = 0; i < COUNT; i++) {
+						const m = meta[i];
+						p[i * 3 + 1] += m.vy;
+						if (p[i * 3 + 1] > 5.5) p[i * 3 + 1] = -5.5;
+						if (p[i * 3 + 1] < -5.5) p[i * 3 + 1] = 5.5;
+						p[i * 3] = m.bx + Math.sin(t * m.sp + m.ph) * m.amp;
+					}
+					geo.attributes.position.needsUpdate = true;
+					camera.position.x += (mx * .7 - camera.position.x) * .04;
+					camera.position.y += (-my * .5 - camera.position.y) * .04;
+					camera.lookAt(0, 0, 0);
+					renderer.render(scene, camera);
+				})();
+			}
+		});
+	</script>
+</body>
+
+</html>
